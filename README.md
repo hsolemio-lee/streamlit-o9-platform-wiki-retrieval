@@ -1,4 +1,4 @@
-# NEXPRIME-LANGCHAIN
+# o9-platform-wiki-retrieval
 
 ## Tools
 <div align="center">
