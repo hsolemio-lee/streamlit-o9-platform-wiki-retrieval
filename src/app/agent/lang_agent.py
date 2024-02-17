@@ -29,7 +29,7 @@ def get_text_language() -> LLMChain:
     llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", verbose=True)
     template = """
         What is the language of below text?
-        \n{text}
+        \ntext: "{text}"
         
         \n{format_instructions}
     """
