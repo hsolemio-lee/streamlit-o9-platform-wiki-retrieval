@@ -48,12 +48,16 @@ class RetrievalService:
         )
         prompt = f"""{translated_query.translated}"""
 
+        
         result = qa({"question": prompt, "chat_history": chat_history})
 
         if query_language == 'English':
             return result
         else:
-            translated_result = translate_parser.parse(get_translate_chain().run(origin_text=result['answer'], lang=query_language.language))
-            result['answer'] = translated_result.translated
-
-            return result
+            try:
+                translated_result = translate_parser.parse(get_translate_chain().run(origin_text=result['answer'], lang=query_language.language))
+                result['answer'] = translated_result.translated
+            except Exception as e:
+                print(e)
+            finally:
+                return result
