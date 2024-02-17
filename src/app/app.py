@@ -3,6 +3,7 @@ from streamlit_chat import message
 from service.retrieval_service import RetrievalService
 from typing import Set
 import logging
+import os
 
 # Configure logging
 logging.basicConfig(
@@ -12,6 +13,10 @@ logging.basicConfig(
 retrieval_service = RetrievalService()
 
 st.header("Cloud SCM Dev - o9 Platform Helper bot")
+openai_api_key = st.text_input("OpenAI API Key", 'Please enter your API Key')
+if openai_api_key:
+    os.environ["OPENAI_API_KEY"] = openai_api_key
+
 if st.button("Reset", type="primary"):
     st.session_state["user_prompt_history"] = []
     st.session_state["chat_answers_history"] = []
