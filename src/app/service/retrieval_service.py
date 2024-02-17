@@ -36,8 +36,8 @@ class RetrievalService:
 
         chat = ChatOpenAI(model_name="gpt-3.5-turbo", verbose=True, temperature=0)
 
-        # vectore_store = get_qdrant_db(collection)
-        vectore_store = get_chroma_db(collection)
+        vectore_store = get_qdrant_db(collection)
+        # vectore_store = get_chroma_db(collection)
 
         translated_query = query
         if query_language != 'English':

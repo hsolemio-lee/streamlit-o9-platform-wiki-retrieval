@@ -15,5 +15,5 @@ def embedding_o9platform_wiki(embeddingInfo: EmbeddingInfo):
 
 @embedding_router.post("/collection/dir")
 def embedding_o9platform_wiki_by_dir(embeddingInfo: EmbeddingInfo):
-    embedding_service.embedding_o9_platform_wiki_chroma(embeddingInfo)
+    embedding_service.embedding_o9platform_wiki_qdrant_by_dir(embeddingInfo)
     return {"result": "success"}
