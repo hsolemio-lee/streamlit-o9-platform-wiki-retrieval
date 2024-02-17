@@ -4,7 +4,7 @@ from langchain_community.vectorstores import Qdrant, Chroma
 from langchain_openai import OpenAIEmbeddings
 from qdrant_client import QdrantClient
 
-load_dotenv
+load_dotenv()
 qdrant_url = os.getenv("QDRANT_URL")
 
 
