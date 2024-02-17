@@ -1,0 +1,30 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = "*"
+asyncio = "*"
+langchain = "*"
+python-dotenv = "*"
+openai = "*"
+chromadb = "*"
+tiktoken = "*"
+langchain-openai = "*"
+pypdf = "*"
+qdrant-client = "*"
+bs4 = "*"
+lxml = "*"
+streamlit = "*"
+streamlit-chat = "*"
+tqdm = "*"
+pexpect = "*"
+jinja2 = "*"
+unstructured = "*"
+nltk = "*"
+
+[dev-packages]
+black = "*"
+
