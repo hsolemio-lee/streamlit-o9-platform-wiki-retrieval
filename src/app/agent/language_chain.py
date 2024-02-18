@@ -14,7 +14,7 @@ def get_translate_chain() -> LLMChain:
         You are a translator with vast knowledge of human languages. Please translate the following from {input_language} to {output_language}.
         However, following rules must be applied when tranlating.
         1. the professional terms must be in English.
-        2. The paragraph format must be maintained.
+        2. Make paragraph format more prettier.
 
         HUMAN
         {text}
