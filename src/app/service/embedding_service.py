@@ -14,13 +14,13 @@ class EmbeddingService:
 
     def embedding_o9platform_wiki_qdrant(self, embeddingInfo: EmbeddingInfo):
 
-        # loader = BSHTMLLoasder(embeddingInfo.file_url)
-        loader = TextLoader(embeddingInfo.file_url)
+        loader = BSHTMLLoader(embeddingInfo.file_url)
+        # loader = TextLoader(embeddingInfo.file_url)
         document = loader.load()
 
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=200,
-            chunk_overlap=0,
+            chunk_size=500,
+            chunk_overlap=50,
         )
 
         docs = text_splitter.split_documents(document)
