@@ -10,13 +10,20 @@ load_dotenv()
 def get_translate_chain() -> LLMChain:
     llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", verbose=True)
     template = """
-        Given the text origin text \"{origin_text}\", please translate into {lang}. Answer must be below format.
+        SYSTEM
+        You are a translator with vast knowledge of human languages. Please translate the following from {input_language} to {output_language}.
+        However, following rules must be applied when tranlating.
+        1. the professional terms must be in English.
+        2. The paragraph format must be maintained.
+
+        HUMAN
+        {text}
 
         \n{format_instructions}
     """
 
     translate_prompt_template = PromptTemplate(
-        input_variables=["origin_text", "lang"],
+        input_variables=["input_language", "output_language", "text"],
         template=template,
         partial_variables={
             "format_instructions": translate_parser.get_format_instructions()
@@ -25,10 +32,15 @@ def get_translate_chain() -> LLMChain:
 
     return LLMChain(llm=llm, prompt=translate_prompt_template)
 
+
 def get_text_language() -> LLMChain:
     llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", verbose=True)
     template = """
+        SYSTEM
+        You are now a language judgment machine. Please let me know in which language the text below was written.
         What is the language of below text?
+
+        HUMAN
         \ntext: "{text}"
         
         \n{format_instructions}
@@ -42,4 +54,3 @@ def get_text_language() -> LLMChain:
         },
     )
     return LLMChain(llm=llm, prompt=prompt_template, verbose=True)
-

@@ -7,7 +7,7 @@ from dto.qa_dto import QA
 
 # from dto.chat_dto import ChatDTO
 from typing import Any, List, Dict
-from agent.lang_agent import get_translate_chain, get_text_language
+from agent.language_chain import get_translate_chain, get_text_language
 from parser.ouput_parser import translate_parser, language_parser
 
 load_dotenv()
@@ -40,23 +40,35 @@ class RetrievalService:
         # vectore_store = get_chroma_db(collection)
 
         translated_query = query
-        if query_language != 'English':
-            translated_query = translate_parser.parse(get_translate_chain().run(origin_text=query, lang="English"))
+        if query_language != "English":
+            translated_query = translate_parser.parse(
+                get_translate_chain().run(
+                    text=query, input_language=query_language, output_language="English"
+                )
+            )
 
         qa = ConversationalRetrievalChain.from_llm(
-            llm=chat, retriever=vectore_store.as_retriever(), return_source_documents=True
+            llm=chat,
+            retriever=vectore_store.as_retriever(),
+            return_source_documents=True,
         )
+
         prompt = f"""{translated_query.translated}"""
 
-        
         result = qa({"question": prompt, "chat_history": chat_history})
 
-        if query_language == 'English':
+        if query_language == "English":
             return result
         else:
             try:
-                translated_result = translate_parser.parse(get_translate_chain().run(origin_text=result['answer'], lang=query_language.language))
-                result['answer'] = translated_result.translated
+                translated_result = translate_parser.parse(
+                    get_translate_chain().run(
+                        text=result["answer"],
+                        input_language="English",
+                        output_language=query_language.language,
+                    )
+                )
+                result["answer"] = translated_result.translated
             except Exception as e:
                 print(e)
             finally:

@@ -12,6 +12,7 @@ logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
+
 def create_app():
     app = FastAPI()
     app.include_router(embedding_router, prefix="/api/v1/embedding", tags=["v1"])

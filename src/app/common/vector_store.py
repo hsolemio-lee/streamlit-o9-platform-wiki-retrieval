@@ -15,6 +15,7 @@ def get_qdrant_db(collection: str) -> Qdrant:
         client=qdrant_client, collection_name=collection, embeddings=OpenAIEmbeddings()
     )
 
+
 def get_chroma_db(collection: str) -> Chroma:
     return Chroma(
         persist_directory="data",

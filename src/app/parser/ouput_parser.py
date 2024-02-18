@@ -16,6 +16,7 @@ class TranslateOutput(BaseModel):
 
 translate_parser = PydanticOutputParser(pydantic_object=TranslateOutput)
 
+
 class LanguageOutput(BaseModel):
     language: str = Field(description="language of text")
 
@@ -23,5 +24,6 @@ class LanguageOutput(BaseModel):
         return {
             "language": self.language,
         }
-    
+
+
 language_parser = PydanticOutputParser(pydantic_object=LanguageOutput)
