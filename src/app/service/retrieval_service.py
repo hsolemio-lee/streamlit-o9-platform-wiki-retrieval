@@ -60,19 +60,17 @@ class RetrievalService:
 
         result = qa({"question": prompt, "chat_history": chat_history})
 
-        url_store = get_qdrant_db("o9_platform_all_pages")
-        rag_chain = (
-            {"context": url_store.as_retriever(), "query": RunnablePassthrough()}
-            | source_url_retieval_chain()
-        )
-        try:
-            source_urls = source_url_parser.parse(rag_chain.invoke(prompt)['text'])
-            result["source_urls"] = source_urls.urls
-            print('===============result===============', result["source_urls"])
-        except Exception as e:
-                print(e)
-
         if query_language == "English":
+            url_store = get_qdrant_db("o9_platform_all_pages")
+            rag_chain = (
+                {"context": url_store.as_retriever(), "query": RunnablePassthrough()}
+                | source_url_retieval_chain()
+            )
+            try:
+                source_urls = source_url_parser.parse(rag_chain.invoke(result["answer"])['text'])
+                result["source_urls"] = source_urls.urls
+            except Exception as e:
+                    print(e)
             return result
         else:
             try:
@@ -87,6 +85,16 @@ class RetrievalService:
             except Exception as e:
                 print(e)
             finally:
+                url_store = get_qdrant_db("o9_platform_all_pages")
+                rag_chain = (
+                    {"context": url_store.as_retriever(), "query": RunnablePassthrough()}
+                    | source_url_retieval_chain()
+                )
+                try:
+                    source_urls = source_url_parser.parse(rag_chain.invoke(result["answer"])['text'])
+                    result["source_urls"] = source_urls.urls
+                except Exception as e:
+                        print(e)
                 return result
             
     
