@@ -27,7 +27,12 @@ $ cd YOUR-PRJ-PATH
 $ pipenv --python 3.11.7 sync
 ```
 
-_Run_ a streamit app
+_Run_ a fastapi app
+```bash
+$ uvicorn main:app
 ```
+
+_Run_ a streamit app
+```bash
 $ streamlit run src/app/app.py
 ```
