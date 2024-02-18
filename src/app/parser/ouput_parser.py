@@ -29,6 +29,7 @@ class LanguageOutput(BaseModel):
 
 language_parser = PydanticOutputParser(pydantic_object=LanguageOutput)
 
+
 class SourceURLOutput(BaseModel):
     urls: List[str] = Field(description="List of urls")
 

@@ -9,7 +9,7 @@ qdrant_url = os.getenv("QDRANT_URL")
 
 
 def get_qdrant_db(collection: str) -> Qdrant:
-    print('qdrant url', qdrant_url)
+    print("qdrant url", qdrant_url)
 
     qdrant_client = QdrantClient(url=qdrant_url)
     return Qdrant(

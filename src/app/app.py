@@ -13,7 +13,9 @@ logging.basicConfig(
 retrieval_service = RetrievalService()
 
 st.header("Cloud SCM Dev - o9 Platform Helper bot")
-openai_api_key = st.text_input("OpenAI API Key", placeholder="Please enter your API Key")
+openai_api_key = st.text_input(
+    "OpenAI API Key", placeholder="Please enter your API Key"
+)
 if openai_api_key:
     os.environ["OPENAI_API_KEY"] = openai_api_key
 
@@ -33,14 +35,16 @@ if "chat_answers_history" not in st.session_state:
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
 
+
 def create_sources_string(source_urls: List[str]) -> str:
     if not source_urls:
         return ""
-    source_urls.sort()
+
     sources_string = "Related Sources:\n"
     for i, source in enumerate(source_urls):
         sources_string += f"{i+1}. {source}\n"
     return sources_string
+
 
 if prompt:
     with st.spinner("Generating response.."):
@@ -49,12 +53,10 @@ if prompt:
             collection="o9_platform_wiki",
             chat_history=st.session_state["chat_history"],
         )
-        
+
         source_urls = generated_response["source_urls"]
-        formatted_response = (
-            f"{generated_response['answer']}\n\n\n\n{create_sources_string(source_urls)}"
-        )
-        
+        formatted_response = f"{generated_response['answer']}\n\n\n\n{create_sources_string(source_urls)}"
+
         st.session_state["user_prompt_history"].append(prompt)
         st.session_state["chat_answers_history"].append(formatted_response)
         st.session_state["chat_history"].append(
