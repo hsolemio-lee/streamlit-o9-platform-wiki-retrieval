@@ -7,16 +7,21 @@ from parser.ouput_parser import translate_parser, language_parser, source_url_pa
 def get_translate_chain() -> LLMChain:
     llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", verbose=True)
     template = """
-        SYSTEM
-        You are a translator with vast knowledge of human languages. Please translate the following from {input_language} to {output_language}.
-        However, following rules must be applied when tranlating.
-        1. the professional terms must be in English.
-        2. Make paragraph format more prettier.
+{format_instructions}
 
-        HUMAN
-        {text}
+SYSTEM
+```
+You are a translator with vast knowledge of human languages. 
+Following rules must be applied.
+1. the professional terms must be in English.
+2. Make paragraph format more prettier.
+Please translate the ORIGIN_TEXT from {input_language} to {output_language}.
+```
 
-        \n{format_instructions}
+```
+HUMAN
+ORIGIN_TEXT: "{text}"
+```
     """
 
     translate_prompt_template = PromptTemplate(
@@ -27,7 +32,7 @@ def get_translate_chain() -> LLMChain:
         },
     )
 
-    return LLMChain(llm=llm, prompt=translate_prompt_template)
+    return LLMChain(llm=llm, prompt=translate_prompt_template, verbose=True)
 
 
 def get_text_language() -> LLMChain:
@@ -35,10 +40,8 @@ def get_text_language() -> LLMChain:
     template = """
         SYSTEM
         You are now a language judgment machine. Please let me know in which language the text below was written.
-        What is the language of below text?
-
-        HUMAN
-        \ntext: "{text}"
+        What is the language of below GIVEN_TEXT?
+        \nGIVEN_TEXT: "{text}"
         
         \n{format_instructions}
     """

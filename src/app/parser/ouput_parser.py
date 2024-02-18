@@ -5,8 +5,8 @@ from typing import List
 
 class TranslateOutput(BaseModel):
 
-    origin: str = Field(description="origin text")
-    translated: str = Field(description="translated text")
+    origin: str = Field(description="origin text : before translate")
+    translated: str = Field(description="translated text : after translate")
 
     def to_dict(self):
         return {

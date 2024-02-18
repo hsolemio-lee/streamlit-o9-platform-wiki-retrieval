@@ -12,7 +12,12 @@ from agent.chains import (
     get_text_language,
     source_url_retieval_chain,
 )
-from parser.ouput_parser import translate_parser, language_parser, source_url_parser
+from parser.ouput_parser import (
+    translate_parser,
+    language_parser,
+    source_url_parser,
+    TranslateOutput,
+)
 
 load_dotenv()
 
@@ -44,8 +49,8 @@ class RetrievalService:
         vectore_store = get_qdrant_db(collection)
         # vectore_store = get_chroma_db(collection)
 
-        translated_query = query
-        if query_language != "English":
+        translated_query = TranslateOutput(origin=query, translated=query)
+        if query_language.language != "English":
             translated_query = translate_parser.parse(
                 get_translate_chain().run(
                     text=query, input_language=query_language, output_language="English"
@@ -61,10 +66,7 @@ class RetrievalService:
         prompt = f"""{translated_query.translated}"""
 
         result = qa({"question": prompt, "chat_history": chat_history})
-        source_titles = set(
-            [doc.metadata["title"] for doc in result["source_documents"]]
-        )
-        if query_language == "English":
+        if query_language.language == "English":
             url_store = get_qdrant_db("o9_platform_all_pages")
             rag_chain = {
                 "context": url_store.as_retriever(),
