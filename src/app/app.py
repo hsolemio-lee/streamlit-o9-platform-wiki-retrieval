@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_chat import message
 from service.retrieval_service import RetrievalService
-from typing import Set
+from typing import List
 import logging
 import os
 
@@ -33,13 +33,12 @@ if "chat_answers_history" not in st.session_state:
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
 
-def create_sources_string(titles: Set[str]) -> str:
-    if not titles:
+def create_sources_string(source_urls: List[str]) -> str:
+    if not source_urls:
         return ""
-    title_list = list(titles)
-    title_list.sort()
-    sources_string = "Sources:\n"
-    for i, source in enumerate(title_list):
+    source_urls.sort()
+    sources_string = "Related Sources:\n"
+    for i, source in enumerate(source_urls):
         sources_string += f"{i+1}. {source}\n"
     return sources_string
 
@@ -50,13 +49,10 @@ if prompt:
             collection="o9_platform_wiki",
             chat_history=st.session_state["chat_history"],
         )
-
-        titles = set(
-            [doc.metadata["title"] for doc in generated_response["source_documents"]]
-        )
-
+        
+        source_urls = generated_response["source_urls"]
         formatted_response = (
-            f"{generated_response['answer']}\n\n\n\n{create_sources_string(titles)}"
+            f"{generated_response['answer']}\n\n\n\n{create_sources_string(source_urls)}"
         )
         
         st.session_state["user_prompt_history"].append(prompt)

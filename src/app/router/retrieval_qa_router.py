@@ -11,9 +11,6 @@ retrieval_service = RetrievalService()
 def get_retrieval_qa(qa: QA):
     return retrieval_service.retrieval_qa(qa)
 
-
 @retrieval_qa_router.post("/retrieval/conversation")
 def get_retrieval_qa(chat_dto: ChatDTO):
-    return retrieval_service.run_chat_retrieval_qa(
-        chat_dto.query, chat_dto.collection, chat_dto.chat_history
-    )
+    return retrieval_service.run_chat_retrieval_qa(chat_dto.query, chat_dto.collection, chat_dto.chat_history)

@@ -1,11 +1,7 @@
 from langchain.prompts import PromptTemplate
 from langchain_community.chat_models import ChatOpenAI
-from langchain.chains import LLMChain
-from parser.ouput_parser import translate_parser, language_parser
-from dotenv import load_dotenv
-
-load_dotenv()
-
+from langchain.chains import LLMChain, RetrievalQA
+from parser.ouput_parser import translate_parser, language_parser, source_url_parser
 
 def get_translate_chain() -> LLMChain:
     llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", verbose=True)
@@ -53,4 +49,34 @@ def get_text_language() -> LLMChain:
             "format_instructions": language_parser.get_format_instructions()
         },
     )
+    return LLMChain(llm=llm, prompt=prompt_template, verbose=True)
+
+def source_url_retieval_chain() -> LLMChain:
+    llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", verbose=True)
+
+    template = """
+        SYSTEM
+        1. You must find up to 5 href URIs related to HUMAN's query and context.
+        2. URL prefix is "https://platformwiki.o9solutions.com". Make 5 full URLs with URL prefix and URIs found in step 1.
+
+        EXAMPLE
+        1. Suppose that founded href is "/index.php/Time-varying_Production_%26_Consumption_(Yield)"
+        2. Add URL prefix("https://platformwiki.o9solutions.com") with Founded href "/index.php/Time-varying_Production_%26_Consumption_(Yield)"
+        3. Answer is "https://platformwiki.o9solutions.com/index.php/Time-varying_Production_%26_Consumption_(Yield)"
+
+        HUMAN
+        Question: {query}
+        Context: {context}
+
+        \n{format_instructions}
+    """
+
+    prompt_template = PromptTemplate(
+        input_variables=["query", "context"],
+        template=template,
+        partial_variables={
+            "format_instructions": source_url_parser.get_format_instructions()
+        },
+    )
+
     return LLMChain(llm=llm, prompt=prompt_template, verbose=True)

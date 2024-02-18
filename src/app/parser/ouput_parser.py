@@ -1,5 +1,6 @@
 from langchain.output_parsers import PydanticOutputParser
 from langchain_core.pydantic_v1 import BaseModel, Field
+from typing import List
 
 
 class TranslateOutput(BaseModel):
@@ -27,3 +28,14 @@ class LanguageOutput(BaseModel):
 
 
 language_parser = PydanticOutputParser(pydantic_object=LanguageOutput)
+
+class SourceURLOutput(BaseModel):
+    urls: List[str] = Field(description="List of urls")
+
+    def to_dict(self):
+        return {
+            "urls": self.urls,
+        }
+
+
+source_url_parser = PydanticOutputParser(pydantic_object=SourceURLOutput)

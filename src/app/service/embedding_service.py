@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import BSHTMLLoader
+from langchain_community.document_loaders import BSHTMLLoader, TextLoader
 from langchain_community.vectorstores import Qdrant, Chroma
 from langchain_openai import OpenAIEmbeddings
 from dto.embedding_info_dto import EmbeddingInfo
@@ -14,12 +14,13 @@ class EmbeddingService:
 
     def embedding_o9platform_wiki_qdrant(self, embeddingInfo: EmbeddingInfo):
 
-        loader = BSHTMLLoader(embeddingInfo.file_url)
+        # loader = BSHTMLLoasder(embeddingInfo.file_url)
+        loader = TextLoader(embeddingInfo.file_url)
         document = loader.load()
 
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000,
-            chunk_overlap=10,
+            chunk_size=200,
+            chunk_overlap=0,
         )
 
         docs = text_splitter.split_documents(document)
